@@ -1,11 +1,10 @@
 package main
 
 import (
-	_ "zts/routers"
 	"github.com/astaxie/beego"
+	_ "go-zts/routers"
 )
 
 func main() {
 	beego.Run()
 }
-
