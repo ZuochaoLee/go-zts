@@ -19,11 +19,11 @@
 #安装使用：
 
 ##依赖：
-go get github.com/alphazero/Go-Redis
+go get github.com/go-sql-driver/mysql
 
-go get github.com/coocood/jas
+go get github.com/astaxie/beego
 
-go get github.com/mcuadros/go-candyjs
+go get github.com/jakecoffman/cron
 
 ##安装：
-go get git.oschina.net/buptlee/agent_crawl
+go get github.com/ZuochaoLee/go-zts
