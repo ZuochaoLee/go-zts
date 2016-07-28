@@ -21,7 +21,8 @@ type TestController struct {
 }
 
 func (c *TestController) Get() {
-	c.Data["json"] = map[string]int{"code": models.UpdateConf("php", "/lnmp/php/bin/php")}
+	models.InitTask()
+	//c.Data["json"] = map[string]int{"code": models.UpdateConf("php", "/lnmp/php/bin/php")}
 	c.ServeJSON()
 }
 

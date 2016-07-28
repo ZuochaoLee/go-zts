@@ -61,6 +61,43 @@ func GetTask() (task []Task) {
 	}
 	return
 }
+func GetTaskByName(name string) (task Task) {
+	rows, err := db.Query("select name, script,command,times,status,des from task where name='" + name + "';")
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+	task = Task{}
+	for rows.Next() {
+		err := rows.Scan(&task.Name, &task.Script, &task.Command, &task.Time, &task.Status, &task.Des)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return
+}
+func GetConfByName(name string) (command string) {
+	rows, err := db.Query("select script from conf where name='" + name + "';")
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err := rows.Scan(&command)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return
+}
 func AddTask(name, script, command, times, des string, status int) (code int) {
 	var sql = "INSERT INTO task(name, script,command,times,status,des) VALUES('" + name + "', '" + script + "', '" + command + "', '" + times + "', " + strconv.Itoa(status) + ", '" + des + "');"
 	println(sql)
@@ -117,6 +154,7 @@ func Stop(name string) (code int) {
 	_, err := db.Exec(sql)
 	if err != nil {
 		code = 0
+		RemoveCron(name)
 	} else {
 		code = 1
 	}
@@ -127,6 +165,8 @@ func Start(name string) (code int) {
 	_, err := db.Exec(sql)
 	if err != nil {
 		code = 0
+		task := GetTaskByName(name)
+		AddCron(task.Time, task.Script, task.Command, task.Name)
 	} else {
 		code = 1
 	}
